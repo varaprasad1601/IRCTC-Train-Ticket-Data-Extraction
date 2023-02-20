@@ -22,4 +22,6 @@ urlpatterns = [
     # path('change_password',views.change_password,name='change_password'),
     path('send_otp',views.send_otp,name='send_otp'),
     path('check_otp',views.check_otp,name='check_otp'),
+    path('contact',views.contact,name='contact'),
+    path('messages',views.messages,name='messages'),
 ]

@@ -23,3 +23,17 @@ class user_info(models.Model):
     
     class Meta:
         verbose_name_plural = "Register Table"
+        
+class contact_us(models.Model):
+    email = models.CharField(max_length=250,blank=True,null=True)
+    subject = models.CharField(max_length=250,blank=True,null=True)
+    message = models.TextField(blank=True,null=True)
+    status = models.BooleanField(default=False)
+    added_on = models.DateTimeField(auto_now_add=True,null=True)
+    updated_on = models.DateTimeField(auto_now=True,null=True)
+    
+    def __str__(self):
+        return self.email
+    
+    class Meta:
+        verbose_name_plural = "Contact Us Table"

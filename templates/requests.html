@@ -3,7 +3,16 @@
 {% block content %}
 <head>
 <style>
+    
     @media screen and (max-width:800px){
+        ::-webkit-scrollbar{
+            width: 2px;
+            background:#c292de75;
+        }
+        ::-webkit-scrollbar-thumb{
+            background-color: #c292de;
+            border-radius: 50px;
+        }
         *{
             overflow-x: hidden !important;
         }
@@ -45,11 +54,11 @@
     </div>
     <hr>
     {% if status %}
-    <p>{{status}}</p>
+        <p>{{status}}</p>
     {% endif %}
     <div class="container-fluid">
     <div class="row justify-content-start p-0">
-        <div class="col-md-12 mb-3 margin_box" style="padding:0px !important; margin-left: -16px !important;height:74vh; overflow-y: scroll;overflow-x: hidden;">
+        <div class="col-md-12 mb-3 margin_box" style="padding:0px !important; margin-left: -16px !important;height:75vh; overflow-y: scroll;overflow-x: hidden;">
             <ul style="list-style: none;">
                 {% for u in users %}
                 {% if u.is_active == False %}

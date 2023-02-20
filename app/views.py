@@ -5,7 +5,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth import logout as django_logout
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from .models import user_info
+from .models import user_info,contact_us
 from django.core.mail import EmailMessage
 import csv
 from app.encryption_util import *
@@ -307,6 +307,76 @@ def user_login(request):
         else:
             return render(request,"index.html",{"status":"invalid username or password"})
     return HttpResponseRedirect("/login/")
+
+
+
+
+
+# contact us
+import time
+def contact(request):
+    if request.user.is_authenticated:
+        context = {}
+        try:    
+            user =  User.objects.get(id=request.user.id)
+            context["data"] = user
+            if request.method == "POST":
+                subject = request.POST["subject"]
+                message = request.POST["message"]
+                row = contact_us()
+                row.email = user.email
+                row.subject = subject
+                row.message = message
+                row.save()
+                context["message"] = "submited"
+            else:
+                return render(request,"contact.html",context)
+        except:
+            return HttpResponseRedirect("/")
+    else:
+        return HttpResponseRedirect("/")
+    return render(request,"contact.html",context)
+
+
+
+def messages(request):
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            context = {}
+            context["data"] = request.user
+            rows = contact_us.objects.all().order_by("-added_on")
+            context["rows"] = rows
+            context["count"] = len(rows)
+            new = 0
+            checked = 0
+            for i in rows:
+                if i.status == False:
+                    new+=1
+                else:
+                    checked+=1
+            context["new"]=new
+            context["checked"]=checked
+            try:
+                uid = request.GET["uid"]
+                action = request.GET["action"]
+                row = contact_us.objects.get(id=uid)
+                print(row)
+                if action=="check":
+                    row.status = True
+                    row.save()
+                    return HttpResponseRedirect("messages")
+                elif action=="delete":
+                    row.delete()
+                    return HttpResponseRedirect("messages")
+                else:
+                    return render(request,"messages.html",context)
+            except:
+                return render(request,"messages.html",context)
+        else:
+            return HttpResponseRedirect("/")
+    else:
+        return HttpResponseRedirect("/")
+    return render(request,"messages.html",context)
 
 
 # User Logout
