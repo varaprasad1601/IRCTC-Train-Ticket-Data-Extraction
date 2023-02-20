@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Extracter</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <script src="{% static 'jquery.js' %}"></script>
+    <script src="{% static 'popper.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+
+    <style>
+        .bg{
+            height: 100vh;
+            background:linear-gradient(45deg,blue,purple 70%);
+        }
+        .hide{
+            display: none;
+        }
+        *{
+            -webkit-user-drag: none;
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none; /* IE 10 and IE 11 */
+            user-select: none;
+        }
+        @media screen and (max-width:800px){
+            .sub_btn{
+                width: 100% !important;
+            }
+            .block{
+                margin-top: -30px !important;
+            }
+        }
+        label{
+            font-size: 13px !important;
+        }
+        .form-control{
+            height: 30px !important;
+            font-size: 13px !important;
+        }
+        .form-control::placeholder{
+            font-size: 11px !important;
+        }
+        .mymodal{
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            margin: auto;
+            display: table;
+        }
+        .mymodal > .mobile_modal{
+            display: table-cell;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid bg">
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-center align-items-center bg">
+                <div class="col-md-7 bg-white rounded block">
+                    <div class="row d-flex" id="col">
+                        <div class="col-md-12 px-5 py-4">
+                            <form action="{% url 'register_user' %}" method="post">
+                                {% csrf_token %}
+                                <center><h4 style="font-weight:700">Member Register</h4></center>
+                                <div class="col-md-12 mt-3">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>First Name</label>
+                                            <input type="text" class="form-control bg-light" autocomplete="off" placeholder="Enter First Name" required name="fname" id="fname" onchange="namecheck(this.value,'fname')">
+                                            <div id="fnamemes" style="color:red;font-size:10px;display: none;"></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Last Name</label>
+                                            <input type="text" class="form-control bg-light" autocomplete="off" placeholder="Enter Last Name" required name="lname" id="lname" onchange="namecheck(this.value,'lname')">
+                                            <div id="lnamemes" style="color:red;font-size:10px; display: none;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Working Place</label>
+                                            <input type="text" class="form-control bg-light" autocomplete="off" placeholder="Working Place" required name="wplace" id="wplace">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>State</label>
+                                            <select style="padding-top: 4px;" class="form-control bg-light" required name="state" id="state" onblur="statecheck(this.value)">
+                                                <option></option>
+                                                <option value="Andaman and Nicobar">Andaman and Nicobar</option>
+                                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                                <option value="Assam">Assam</option>
+                                                <option value="Bihar">Bihar</option>
+                                                <option value="Chandigarh">Chandigarh</option>
+                                                <option value="Chhattisgarh">Chhattisgarh</option>
+                                                <option value="Dadra and Nargar Haveli and Daman and Diu">Dadra Nargar Haveli and Daman and Diu</option>
+                                                <option value="Delhi">Delhi</option>
+                                                <option value="Goa">Goa</option>
+                                                <option value="Gujarat">Gujarat</option>
+                                                <option value="Haryana">Haryana</option>
+                                                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                                <option value="Jharkhand">Jharkhand</option>
+                                                <option value="Karnataka">Karnataka</option>
+                                                <option value="Kerala">Kerala</option>
+                                                <option value="Ladakh">Ladakh</option>
+                                                <option value="Lakshadweep">Lakshadweep</option>
+                                                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                                <option value="Maharashtra">Maharashtra</option>
+                                                <option value="Manipur">Manipur</option>
+                                                <option value="Meghalaya">Meghalaya</option>
+                                                <option value="Mizoram">Mizoram</option>
+                                                <option value="Nagaland">Nagaland</option>
+                                                <option value="Odisha">Odisha</option>
+                                                <option value="Puducherry">Puducherry</option>
+                                                <option value="Punjab">Punjab</option>
+                                                <option value="Rajasthan">Rajasthan</option>
+                                                <option value="Sikkim">Sikkim</option>
+                                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                                <option value="Telangana">Telangana</option>
+                                                <option value="Tripura">Tripura</option>
+                                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                                <option value="Uttarakhand">Uttarakhand</option>
+                                                <option value="West Bengal">West Bengal</option>            
+                                            </select>
+                                            <div id="statemes" style="color:red;font-size:10px; display: none;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <label class="mt-0">Mobile Number</label>
+                                <input type="text" autocomplete="off" class="form-control bg-light" placeholder="Mobile Number" required name="mobile" id="mobile" onchange="mobilecheck(this.value)">
+                                <div id="mobilemes" style="color:red;font-size:10px; display: none;"></div>
+                                <label class="mt-1">Email</label>
+                                <input type="email" autocomplete="off" class="form-control bg-light" placeholder="Email" name="email" required id="email" onchange="checkuser(this.value)">
+                                <div id="mailmess" class="mt-0 mb-0" style="color:red;font-size:10px;display: none;"></div>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Password</label>
+                                            <input type="password" autocomplete="off" class="form-control bg-light" placeholder="Password" required name="password" id="password" onchange="passwordcheck(this.value)">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Confirm Password</label>
+                                            <input type="password" autocomplete="off" class="form-control bg-light" placeholder="Confirm Password" required oninput="cpasswordcheck(this.value)" name="cpassword" id="cpassword">
+                                        </div>
+                                    </div>
+                                    <div id="passmess" style="color:red;font-size:10px;display: none;"></div>
+                                </div>
+                                <input type="checkbox" class="ms-1 mt-2 mb-2 me-2" id="show" style="height: 13px; display: inline;"><p style="display: inline; font-size: 13px;">Show Password</p><br>
+                                <input type="submit" value="Submit" class="sub_btn btn btn-primary mt-1 mb-2 px-5" style="width:100%;" id="sub_btn"><br>
+                                <center><p class="mt-2" style="font-size: 13px;display: inline;">Already an User? Click Here to<a href="{% url 'index' %}" class="px-1 nav-link text-primary" style="display: inline;">Login</a></p></center>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var fnerror=0;
+        var lnerror=0;
+        var pherror=0;
+        var emerror=0;
+        var nperror=0;
+        var cperror=0;
+        var sterror=0;
+        $("#sub_btn").attr("disabled","disabled");
+
+        var check=document.getElementById("show");
+        check.addEventListener("click",function(){
+            var s=document.getElementById("show").checked;
+            if(s){
+                document.getElementById("password").type="text"
+                document.getElementById("cpassword").type="text"
+            }else{
+                document.getElementById("password").type="password"
+                document.getElementById("cpassword").type="password"
+            }
+        });
+
+
+        function statecheck(value){
+            if (value.length>1){
+                document.getElementById("state").style.borderColor="lightgray";
+                document.getElementById("statemes").style.display="none";
+                sterror=1;
+                btn(sterror)
+            }
+            else{
+                document.getElementById("state").style.borderColor="red";
+                document.getElementById("statemes").style.display="block";
+                document.getElementById("statemes").innerText="* Select State";
+                sterror=0;
+                btn(sterror)
+            }
+        }
+
+
+
+        function namecheck(value,x){
+            var nreg=/^[a-z, ]+$/i;
+            var a=nreg.test(value);
+            if(a==false | value.length<3){
+                if(x=="fname"){
+                    document.getElementById("fname").style.borderColor="red";
+                    document.getElementById("fnamemes").style.display="block";
+                    document.getElementById("fnamemes").innerText="* Enter Valid Name";
+                    // $("#sub_btn").attr("disabled","disabled");
+                    fnerror = 0
+                    btn(fnerror)
+                    
+                }
+                else if (x=="lname"){
+                    document.getElementById("lname").style.borderColor="red";
+                    document.getElementById("lnamemes").style.display="block";
+                    document.getElementById("lnamemes").innerText="* Enter Valid Name";
+                    // $("#sub_btn").attr("disabled","disabled");
+                    lnerror = 0
+                    btn(lnerror)
+                }
+            }
+            else{
+                if(x=="fname"){
+                    document.getElementById("fname").style.borderColor="lightgray";
+                    document.getElementById("fnamemes").style.display="none";
+                    // $("#sub_btn").removeAttr("disabled");
+                    fnerror = 1
+                    btn(fnerror)
+                }
+                else if (x=="lname"){
+                    document.getElementById("lname").style.borderColor="lightgray";
+                    document.getElementById("lnamemes").style.display="none";
+                    // $("#sub_btn").removeAttr("disabled");
+                    lnerror = 1
+                    btn(lnerror)
+                }
+            }
+        }
+
+
+        function mobilecheck(value){
+            var indreg=/^[6-9]\d{9}$/;
+            var a=indreg.test(value);
+            if(a==false){
+                document.getElementById("mobile").style.borderColor="red";
+                document.getElementById("mobilemes").style.display="block";
+                document.getElementById("mobilemes").innerText="* Enter valid Mobile Number";
+                // $("#sub_btn").attr("disabled","disabled");
+                pherror = 0
+                btn(pherror)
+
+            }
+            else{
+                document.getElementById("mobile").style.borderColor="lightgray";
+                document.getElementById("mobilemes").style.display="none";
+                // $("#sub_btn").removeAttr("disabled");
+                pherror = 1
+                btn(pherror)
+            }
+        }
+
+        
+        var pass = 0
+        var cpass = 0
+        function passwordcheck(value){
+            var np = $("#password").val();
+            var cp = $("#cpassword").val();
+            var nreg=/^[a-z,_,0-9]+$/i;
+            var a=nreg.test(value);
+            if(a==false | np.length<6){
+                if(np.length<6){
+                    document.getElementById("password").style.borderColor="red";
+                    document.getElementById("passmess").style.display="block";
+                    document.getElementById("passmess").innerText="* Password must contains at least 6 characters";
+                    // $("#sub_btn").attr("disabled","disabled");
+                    pass = 0
+                    nperror = 0
+                    btn(nperror)
+                }
+                else{
+                    document.getElementById("password").style.borderColor="red";
+                    document.getElementById("passmess").style.display="block";
+                    document.getElementById("passmess").innerText="* Enter Valid Password (Combination of alphabets and numbers)";
+                    // $("#sub_btn").attr("disabled","disabled");
+                    pass = 0
+                    nperror = 0
+                    btn(nperror)
+                }
+            }
+            else{
+                document.getElementById("password").style.borderColor="lightgray";
+                document.getElementById("passmess").style.display="none";
+                // $("#sub_btn").removeAttr("disabled");
+                pass = 1
+                nperror = 1
+                btn(nperror)
+                if(cpass == 0 | cpass == 1){
+                    cpasswordcheck(cp);
+                }
+            }
+        }
+
+
+        function cpasswordcheck(value){
+            var np = $("#password").val();
+            if (pass==1){
+                if(value==np){
+                    document.getElementById("password").style.borderColor="lightgray";
+                    document.getElementById("cpassword").style.borderColor="lightgray";
+                    document.getElementById("passmess").style.display="none";
+                    // $("#sub_btn").removeAttr("disabled");
+                    cpass = 1
+                    cperror = 1
+                    btn(cperror)
+                }
+                else{
+                    document.getElementById("password").style.borderColor="red";
+                    document.getElementById("cpassword").style.borderColor="red";
+                    document.getElementById("passmess").style.display="block";
+                    document.getElementById("passmess").innerText="* Password and Confirm Password not same";
+                    // $("#sub_btn").attr("disabled","disabled");
+                    cpass = 0
+                    cperror = 0
+                    btn(cperror)
+                }
+            }
+            else{
+                document.getElementById("password").style.borderColor="red";
+                document.getElementById("cpassword").style.borderColor="red";
+                document.getElementById("passmess").style.display="block";
+                document.getElementById("passmess").innerText="* Password must contains at least 6 characters";
+                // $("#sub_btn").attr("disabled","disabled");
+                pass = 0
+                nperror = 0
+                cperror = 0
+                btn(cperror)
+                btn(nperror)
+            }  
+        }
+
+
+
+        function checkuser(value){
+            var un = value;
+            $.ajax({
+                url:"{% url 'check_user' %}",
+                type:"get",
+                data:{usern:un},
+                success:function(data){
+                    if (data=="exists"){
+                        document.getElementById("email").style.borderColor="red";
+                        document.getElementById("mailmess").style.display="block";
+                        document.getElementById("mailmess").innerText="* User Already Exists";
+                        // $("#sub_btn").attr("disabled","disabled");
+                        emerror = 0
+                        btn(emerror)
+                    }else{
+                        document.getElementById("email").style.borderColor="lightgray";
+                        document.getElementById("mailmess").style.display="none";
+                        // $("#sub_btn").removeAttr("disabled");
+                        emerror = 1
+                        btn(emerror)
+                    }
+                }
+            })
+        }
+
+        function btn(value){
+            if(lnerror==1 & fnerror==1 & pherror==1 & emerror==1 & nperror==1 & cperror==1 &  sterror==1){
+                $("#sub_btn").removeAttr("disabled");
+            }
+            else{
+                $("#sub_btn").attr("disabled","disabled");
+            }
+        }
+
+    </script>
+</body>
+</html>

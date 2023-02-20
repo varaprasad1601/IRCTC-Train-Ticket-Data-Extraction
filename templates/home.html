@@ -1,0 +1,457 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <script src="{% static 'jquery.js' %}"></script>
+    <script src="{% static 'popper.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    {% block content %}
+    <script>
+        $(document).ready(function(){
+            setTimeout(function(){
+                $("#mymodal").modal('show');
+            },200)
+            
+        });
+    </script>
+    <style>
+        .active{
+            background-color: rgba(211, 211, 211, 0.471) !important;
+        }
+        .file_name{
+            height: 30px !important;
+            overflow-y: hidden;
+        }
+        @media screen and (max-width:800px){
+            .file_name{
+                width:100% !important;
+                overflow-x: hidden !important;
+            }
+            .maindiv{
+                padding: 20px 10px !important;
+            }
+            .innerdiv{
+                width: 330px !important;
+                border-radius: 20px !important;
+            }
+            .percentage{
+                margin-top: -32px !important;
+                width: 100% !important;
+            }
+            .upload_done{
+                height: 390px !important;
+                overflow-y: scroll;
+                overflow-x: hidden;
+                height: 320px !important;
+            }
+            .fileprogress{
+                width: 100% !important;
+            }
+            .check{
+                width: 100%;
+            }
+            .upload_btn{
+                width: 100% !important;
+            }
+            .ext_btn{
+                /* display: flex !important; */
+                flex-direction: column !important;
+            }
+            .cross{
+                margin-right: 9px !important;
+            }
+            .tick{
+                margin-right: 5px !important;
+            }
+            .extract{
+                margin-top: 15px !important;
+                width: 100% !important;
+            }
+            .not_msg{
+                margin-left: 5px !important;
+            }
+            .actions{
+                width: 100% !important;
+            }
+            .mobile_modal{
+                width:90% !important;
+            }
+            .modal_text{
+                margin:15px 2px !important;
+                margin-top: -3px !important;
+            }
+            /* .row_pad{
+                padding: 3% 10px !important;
+            } */
+        }
+        .progress{
+            width: 100%;
+            height: 8px;
+        }
+        /* .progress-bar{
+            width: 50%;
+            height: 8px;
+        } */
+        .upload_done{
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+        .upload_done::-webkit-scrollbar{
+            width: 2px;
+            background-color: whitesmoke;
+        }
+        .upload_done::-webkit-scrollbar-thumb{
+            background-color: lightgray;
+            border-radius: 50px;
+        }
+        .drop_area{
+            display: none !important;
+        }
+        .progress_div{
+            display: none !important;
+        }
+        .file_div{
+            display: flex !important;
+        }
+        .hide{
+            display: none !important;
+        }
+        .unhide{
+            display: block !important;
+        }
+        .mymodal{
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            margin: auto;
+            display: table;
+        }
+        .mymodal > .mobile_modal{
+            display: table-cell;
+        }
+        .btn_hover:hover{
+            background-color: #c292de;
+            color: white !important;
+        }
+        .btn_ext:hover{
+            background-color: #b680d5 !important;
+        }
+        .btn_can:hover{
+            background-color: #8797df !important;
+        }
+        .loading{
+            height: 50px; width: 50px; border: 5px solid rgba(80, 80, 80, 0.213); border-bottom: 5px solid #c292de;border-radius: 50%;
+            animation: ani 1s linear infinite;
+        }
+        @keyframes ani{
+            from{transform:rotate(0deg)}
+            to{transform:rotate(360deg)}
+
+        }
+    </style>
+</head>
+<body  style = "background:radial-gradient(#fff,#c292de)">
+    <div class="container-fluid">
+        <div id="fil_div"></div>
+        <div class="row justify-content-center pt-3 row_pad" style="height: 91vh; padding: 0px 10px;">
+            <!-- <div class="col-md-6 p-5 m-5 maindiv shadow d-flex justify-content-center" style="height:77vh; border-radius: 25px;"> -->
+            <div class="col-md-6 p-5 m-5 maindiv shadow  d-flex justify-content-center" style="height: max-content; border-radius: 25px; background:#fff">
+                <div class="col-md-12 p-3 innerdiv " style="border:2px dashed #fff;border-radius: 5px;" id="drag_area">
+
+                    <div id="drop_area" class="p-5 d-flex justify-content-center flex-column">
+                    <form id="form" action="{% url 'extract_files' %}" method="post" enctype="multipart/form-data">
+                    <!-- <form id="form" action="" method="post"> -->
+                    {% csrf_token %}
+                        <i class="bi bi-cloud-upload d-flex justify-content-center" style="font-size: 50px;color: #c292de;"></i>
+                        <!-- <i class="fa fa-cloud-upload d-flex justify-content-center" style="font-size: 50px;color: gray;"></i> -->
+                        <h5 class="d-flex justify-content-center inner_text m-2" style="font-size:x-large;color: #c292de; text-align:center" id="area_text">Drag & Drop to Upload Files</h5>
+                        <p class="d-flex justify-content-center inner_text" style="font-size:20px;color: #c292de;">or</p>
+                        <div class="d-flex justify-content-center">
+                            <input type="file" name="file" multiple="True" id="file" hidden>
+                            <div class="m-2 btn btn-outline btn_hover rounded-pill upload_btn" for="file" style="width: 60%; outline:1px solid #c292de; color: #c292de;" id="button">Upload Files</div>
+                        </div>
+                            <input type="submit" id="sub_btn" hidden>
+                    </form>
+                    </div>
+
+
+                    <div id="dropped_area" style="display: none;">
+
+                        <!-- file upload progress -->
+                        <div class="col-md-12 border rounded d-flex progress_div" style="margin-bottom:15px;" id="file_progress">
+                            <div class="col-md-1 px-2">
+                                <!-- <i class="bi bi-file-pdf" style="font-size: 35px;"></i> -->
+                                <i class="bi bi-files" style="font-size: 35px; color: #c292de;"></i>
+                                <!-- <img class="mt-2" src="{% static 'images/pdf.png' %}" height="35"> -->
+                            </div>
+                            <div class="col-md-11 fileprogress px-2 pe-3" >
+                                <div class="row d-flex">
+                                    <div class="col-md-11 pt-1 file_name text-dark">
+                                        <small id="fname"></small>
+                                    </div>
+                                    <div class="col-md-1 d-flex px-2 pe-3 percentage pt-2 justify-content-end text-dark">
+                                        <small id="percent"></small>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-1 progress" id="progress">
+                                    <div class="progress-bar" style="background-color: #c292de;" id="progress_bar"></div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- uploaded files -->
+                        <div class="col-md-12 border rounded p-1 mt-1 upload_done" style="height:242px;" id="file_uploaded">
+                            
+                        </div>
+
+                        <p id="not_msg" class="not_msg" style="font-size: 13px; color: #95a3e0; margin: 10px 0px; margin-left: 10px; font-weight: bold;"></p>
+                        <!-- extract button -->
+                        <div class="col-md-12 mb-1 justify-content-between ext_btn" style="display:none !important;" id="extract_btn">
+                            <a href="{% url 'home' %}" class="btn me-5 py-2 actions btn_can" for="sub_btn" style="width: 50%; color: #fff; background-color:#95a3e0">Cancel</a>
+                            <button class="btn py-2 extract actions btn_ext" for="sub_btn" style="width: 50%; color: #fff; background-color: #c292de;" id="btn_value" onclick="loading()">Extract All Files</button>
+                        </div>
+                        <div class="col-md-12 hide d-flex flex-column justify-content-center align-items-center" style="height:275px;" id="loading_block">
+                            <div class="col-md-12 hide mb-2 loading" id="loading">
+                            </div>
+                            <p>Extracting</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="mymodal" role="dialog">
+        <div class="modal-dialog mymodal mobile_modal"> 
+            <div class="modal-content">
+                <!-- <div class="modal-header bg-primary" style="border: none;">
+                    <div class="close" data-bs-dismiss="modal" style="cursor:pointer;font-size: 25px;">&times;</div>
+                    <h4 class="mt-2" style="font-family: oregon; color: white;">𝐑𝐚𝐢𝐥𝐲𝐚𝐰 𝐓𝐢𝐜𝐤𝐞𝐭 𝐃𝐚𝐭𝐚 𝐄𝐱𝐭𝐫𝐚𝐜𝐭𝐞𝐫</h4>
+                </div> -->
+                <div class="modal-body d-flex flex-column align-items-center justify-content-center modal_body inner_text rounded">
+                    <!-- <i class="fa fa-home text-info" style="font-size: 80px;" aria-hidden="true"></i> -->
+                    <div class="d-flex">
+                        <!-- <img src="{% static 'images/icons.png' %}" alt="" srcset="" height="120"> -->
+                        <img src="{% static 'images/icon2.png' %}" class="inner_text" style="filter: drop-shadow(5px 5px 5px lightgray);" height="120">
+                    </div>
+                    <h5 class="text-warning">𝐖𝐞𝐥𝐜𝐨𝐦𝐞</h5>
+                    <p class="mx-3 modal_text" style="text-align:center;">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Qui, tenetur maiores. Facere nulla mollitia, nostrum accusamus inventore obcaecati sapiente ex consequuntur nesciunt soluta, enim provident ducimus voluptates! Facere, voluptas temporibus?</p>
+                    <button class="btn btn-warning shadow mb-2 text-light" style="width: max-content;" data-bs-dismiss="modal">Continue</button>
+                </div>
+                <!-- <div class="modal-footer justify-content-center" style="border: none;">
+                    <button class="btn btn-info" style="width:30%;" data-bs-dismiss="modal">OK</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <script>
+
+        function loading(){
+            $("#file_uploaded").addClass("hide");
+            $("#extract_btn").addClass("hide");
+            $("#not_msg").addClass("hide");
+            $("#loading").addClass("unhide");
+            $("#loading_block").removeClass("hide");
+        }
+
+
+        var btn = document.getElementById("button");
+        var file = document.getElementById("file");
+        var drag_area = document.getElementById("drag_area");
+        var area_text = document.getElementById("area_text");
+        var drop_area = document.getElementById("drop_area");
+        var form = document.getElementById("form");
+        var csrf = document.getElementsByName("csrfmiddlewaretoken")
+
+        var file_progress = document.getElementById("file_progress");
+        var file_uploaded = document.getElementById("file_uploaded");
+        var size = document.getElementById("size");
+        var fname = document.getElementById("fname");
+        var progress = document.getElementById("progress");
+        var progress_bar = document.getElementById("progress_bar");
+        var extract_btn = document.getElementById("extract_btn");
+        var btn_value = document.getElementById("btn_value");
+        var not_msg = document.getElementById("not_msg")
+        // var sub_btn = document.getElementById("sub_btn");
+
+        var fil_div = document.getElementById('fil_div')
+
+
+        // drag_area.addEventListener("dragover", (event)=>{
+        //     event.preventDefault();
+        //     //console.log("file draged");
+        //     drag_area.classList.add("active");
+        //     area_text.innerHTML = "Release to Upload File";
+        // })
+
+
+        drag_area.addEventListener("dragover", dragover)
+        function dragover(event){
+            event.preventDefault();
+            //console.log("file draged");
+            drag_area.classList.add("active");
+            area_text.innerHTML = "Release to Upload File";
+        }
+
+        drag_area.addEventListener("dragleave", ()=>{
+            // console.log("file dragedout");
+            drag_area.classList.remove("active");
+            area_text.innerHTML = "Drag & Drop to Upload File";
+        });
+
+
+        drag_area.addEventListener("drop", (event)=>{
+            event.preventDefault();
+            //console.log("file droped");
+            drag_area.classList.remove("active");
+            drop_area.classList.add("drop_area");
+            dropped_area.style.display = "block";
+            drag_area.removeEventListener("dragover", dragover)
+            var files = event.dataTransfer.files;
+            file_length = files.length;
+            file.files = files
+            for (var i=0;i<files.length;i++){
+                upload(files[i],i,file_length);
+            }; 
+        });
+
+
+
+        btn.addEventListener("click", ()=>{
+            file.click();
+        });
+
+
+        btn_value.addEventListener("click", ()=>{
+            sub_btn.click();
+        });
+
+
+
+        file.addEventListener("change", ()=>{
+            drop_area.classList.add("drop_area");
+            dropped_area.style.display = "block";
+            drag_area.removeEventListener("dragover", dragover)
+            files = file.files;
+            file_length = files.length;
+            for (var i=0;i<files.length;i++){
+                upload(files[i],i,file_length);
+            };
+        });
+
+        var file_count = 0;
+        var not_pdf = 0;
+        function upload(files,i,file_length){
+            var formdata = new FormData();
+            formdata.append("file",files);
+            var filename = files.name;
+            var filetype = files.type
+            // console.log(filetype)
+            if (filename.length>=10){
+                var splitname = filename.split(".");
+                filename = splitname[0].substring(0,12) + "... ." + splitname[1];
+            };
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST","{% url 'upload_file' %}",true);
+            xhr.upload.addEventListener("progress", (e)=>{
+                if(e.lengthComputable){
+                    // console.log("upload :"+e.loaded);
+                    // console.log("total :"+e.total);
+                    var percentage = (e.loaded/e.total*100|0);
+                    // console.log("percentage :"+percentage);
+                    // extract_btn.style.display = "none !important";
+                    file_progress.classList.remove("progress_div");
+                    fname.innerHTML = filename;
+                    percent.innerHTML = percentage+"%";
+                    progress_bar.style.width = percentage+"%";
+                    var filetotal = ((files.size)/1020).toFixed(1);
+                    var filesize;
+                    (filetotal<1024) ? filesize = filetotal + " KB" : filesize = (e.loaded/(1024*1024)).toFixed(1) + " MB";
+
+
+                    if(e.loaded == e.total){
+                        if (filetype=="application/pdf"){
+                            let file_uploaded_text = `<div class="col-md-12  border rounded d-flex mb-2 text-primary" style="height: 54px;">
+                                                <div class="col-md-1 px-2">
+                                                    <img class="mt-2 inner_text" src="{% static 'images/pdf.png' %}" style="filter: drop-shadow(1.5px 1.5px 1.5px lightgray);" height="35">
+                                                </div>
+                                                <div class="col-md-10 check px-2 pe-3">
+                                                    <div class="row d-flex">
+                                                        <div class="col-md-12 pt-1 file_name text-dark">
+                                                            <small id="fname">${filename}</small>
+                                                        </div>
+                                                        <div class="col-md-12 d-flex pe-3 text-dark">
+                                                            <small style="font-size: 10px;" id="size">${filesize}</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-1 d-flex px-2 justify-content-center align-items-center">
+                                                    
+                                                    <i class="fa fa-check tick" style="font-size: 18px; color: #c292de;"></i>
+                                                </div>
+                                            </div>`;
+                                            // <img class="mt-2 inner_text" src="{% static 'images/pdf.png' %}" style="filter: drop-shadow(1.5px 1.5px 1.5px lightgray);" height="35">
+                                            // <i class="bi bi-file-pdf" style="font-size: 35px;"></i>
+                            file_uploaded.insertAdjacentHTML("afterbegin",file_uploaded_text); 
+                            file_count = file_count+1;
+                        }
+                        else{
+                            let file_uploaded_text = `<div class="col-md-12  border rounded d-flex mb-2 text-primary" style="height: 54px;">
+                                                <div class="col-md-1 px-2">
+                                                    <img class="mt-2 inner_text" src="{% static 'images/unknown.png' %}" style="filter: drop-shadow(1.5px 1.5px 1.5px lightgray);" height="36">
+                                                </div>
+                                                <div class="col-md-10 check px-2 pe-3">
+                                                    <div class="row d-flex">
+                                                        <div class="col-md-12 pt-1 file_name text-dark">
+                                                            <small id="fname">${filename}</small>
+                                                        </div>
+                                                        <div class="col-md-12 d-flex pe-3 text-dark">
+                                                            <small style="font-size: 10px;" id="size">${filesize}</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-1 d-flex px-2 justify-content-center align-items-center">
+                                                    <i class="fa fa-times cross" style="font-size: 18px; color:#95a3e0"></i>
+                                                </div>
+                                            </div>`;
+                                            // <p class="me-1 mt-2 text-danger" style="font-size: 30px;">&times;</p>
+                            file_uploaded.insertAdjacentHTML("afterbegin",file_uploaded_text); 
+                            file_count = file_count+1;
+                            not_pdf = not_pdf+1;
+                        }
+                        uploaded(file_length,file_count,not_pdf);
+                    };
+                };
+            });
+            xhr.send(formdata);
+            // uploaded(i,file_length);
+        };
+
+        function uploaded(file_length,file_count,not_pdf){
+            if (file_length == file_count){
+                file_progress.classList.add("progress_div");
+                btn_value.innerText = "Extract "+ (file_count-not_pdf) +" Files";
+                extract_btn.style.display = "flex";
+                not_msg.innerHTML = '<i class="fa fa-times cross"></i> '+not_pdf+' Unknown Files Found!!!'
+                // extract_btn.innerHTML = `<a href="" class="btn btn-danger me-5 py-2 actions" for="sub_btn" style="width: 50%;">Cancel</a>
+                //             <button class="btn btn-primary py-2 extract actions" for="sub_btn" style="width: 50%;" id="btn_value">Extract All Files</button>`
+                // var btn_value = document.getElementById("btn_value");
+                if (not_pdf == file_length){
+                    btn_value.disabled = true
+                    not_msg.innerHTML = '<i class="fa fa-times cross" style="font-weight:bold; color:#95a3e0"></i> '+not_pdf+" Unknown Files Found!!! Upload Pdf's only"
+                }
+            }; 
+        }
+
+
+        function showfiles(){
+            console.log(files);
+        };
+    </script>
+</body>
+{% endblock %}
+</html>

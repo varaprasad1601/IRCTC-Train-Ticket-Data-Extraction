@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+<html>
+{% block content %}
+<head>
+<style>
+    @media screen and (max-width:800px){
+        *{
+            overflow-x: hidden !important;
+        }
+        .top-container{
+            padding-right: 10px !important;
+        }
+        .inner_row{
+            padding: 0px 15px 0px 15px !important;
+        }
+        .user{
+            font-size: 13px !important;
+        }
+        .text{
+            font-size: 10px !important;
+        }
+        .total{
+            display: block;
+            margin-top: -3px !important;
+            margin-bottom: 8px !important;
+        }
+        .head{
+            flex-direction: column !important;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="container-fluid top-container">
+        <div class="row mt-3 px-2">
+            <div class="col-md-12 d-flex justify-content-between head">
+                <div class="col-md-3">
+                    <p class="mt-2 mb-0 total" style="font-weight: 700;">Total Pending Requests : {{count}}</p>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control search" onkeyup="search(this.value)" placeholder="search">
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    {% if status %}
+    <p>{{status}}</p>
+    {% endif %}
+    <div class="container-fluid">
+    <div class="row justify-content-start p-0">
+        <div class="col-md-12 mb-3 margin_box" style="padding:0px !important; margin-left: -16px !important;height:74vh; overflow-y: scroll;overflow-x: hidden;">
+            <ul style="list-style: none;">
+                {% for u in users %}
+                {% if u.is_active == False %}
+                    {% if u.username == "test" %}
+                        
+                    {% else %}
+                        <li class="li">
+                            <div class="row my-2 px-5 inner_row">
+                                <div class="col-md-12 border rounded bg-light p-3">
+                                    <a href="/user/{{u.encrypt_key}}" class="nav-link p-0 user" style="font-size: 20px;">{{u.first_name}} {{u.last_name}}</a>
+                                    <p class="text" style="display: inline; font-size: 13px; color: gray;">{{u.date_joined}}</p><br>
+                                </div>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    </div>
+    <script>
+        function search(value){
+            var input = value.toLowerCase();
+            var items = document.getElementsByClassName("li");
+            Array.from(items).forEach((item)=>{
+                var itemvalue = item.textContent.toLowerCase();
+                if(itemvalue.indexOf(input)!=-1){
+                    console.log(itemvalue)
+                    item.style.display="block"
+                }else{
+                    item.style.display="none"
+                }
+            })
+        }
+    </script>
+</body>
+{% endblock %}
+</html>
+
+
+<!-- {% for u in users %}
+                {% if u.is_active == False %}    
+                <div class="row my-2 border rounded">
+                    <div class="col-md-12 bg-light p-3">
+                        <a href="{% url 'user' %}?uid={{u.id}}" class="nav-link p-0" style="font-size: 25px;">{{u.first_name}} {{u.last_name}}</a>
+                        <p style="display: inline;text-align: left; font-size: 13px; color: gray;">{{u.date_joined}}</p><br>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %} -->

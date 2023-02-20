@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Extracter</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <script src="{% static 'jquery.js' %}"></script>
+    <script src="{% static 'popper.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+
+    <style>
+        .bg{
+            height: 100vh;
+            background:linear-gradient(45deg,blue,purple 70%);
+        }
+        *{
+            -webkit-user-drag: none;
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none; /* IE 10 and IE 11 */
+            user-select: none;
+        }
+        @media screen and (max-width:800px) {
+            .block{
+                margin-top: 0px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid bg">
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-center align-items-center bg">
+                <div class="col-md-4 px-5 bg-white rounded block">
+                    <div class="row" id="col">
+                        <i class="bi bi-envelope mt-2" style="font-size: 50px; text-align: center;"></i>
+                        <center><b style="font-size: 20px;">Your Request has been recorded.</b>
+                        <p style="text-align: center;"></p>We'll review your Account request, if we can confirm it, A confirmation email will be sent to your registered mail Id within 4-5 working days You'll be able to access your account</p>
+                        <a href="{% url 'index' %}" class="btn btn-info mt-3 mb-4" style="width:50%;">Continue</a></center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

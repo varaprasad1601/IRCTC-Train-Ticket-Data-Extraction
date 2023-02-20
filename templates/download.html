@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+{% block content %}
+<head>
+    <!-- <script src="https://kit.fontawesome.com/f007a324c8.js" crossorigin="anonymous"></script> -->
+    <style>
+        .input{
+            border: none;
+            width: 93%;
+            outline: none;
+            border-bottom: 1px solid lightgray !important;
+            padding: 0px 10px !important;
+            color: black;
+            transition: all .3s linear;
+            font-size: 14px;
+            background: none;
+        }
+        .input_error{
+            border-bottom: 1px solid #95a3e0 !important;
+        }
+        .input:focus{
+            border-bottom: 1px solid #b680d5 !important;
+
+        }
+        .input::placeholder{
+            color: lightgray !important;
+        }
+        .span{
+            background-color: transparent !important;
+            border: none !important;
+            padding: 5px 0px 6px 10px !important;
+        }
+        .error_msg{
+            display: none;
+        }
+        @media screen and (max-width:800px){
+            .input{
+                width: 87% !important;
+            }
+            .maindiv{
+                margin-top: -20px !important;
+                padding: 25% 0px !important;
+                margin-bottom: 26% !important;
+            }
+            .span{
+                padding: 0px 0px 2px 3px !important;
+            }
+            .info_div{
+                flex-direction: column !important;
+            }
+            .unknown{
+                margin-top: 25px !important;
+            }
+            .main_body{
+                margin-bottom: 0px !important;
+            }
+            .unknown_inner{
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+            }
+        }
+        .btn_ext:hover{
+            background-color: #b680d5 !important;
+        }
+        .unknown_block{
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+        .unknown_block::-webkit-scrollbar{
+            width: 2px;
+            background-color: whitesmoke;
+        }
+        .unknown_block::-webkit-scrollbar-thumb{
+            background-color: lightgray;
+            border-radius: 50px;
+        }
+    </style>
+</head>
+<body style = "background:radial-gradient(#fff,#c292de)">
+    <div class="container-fluid">
+        <div class="row justify-content-center p-5 maindiv" style="height:max-content">
+            <div class="col-md-12 mb-4 main_body d-flex info_div justify-content-around" style="height:max-content">
+                <div class="col-md-6 p-5 unknown_inner d-flex flex-column shadow bg-light " style="border-radius: 20px; height:max-content;">
+                    <!-- <i class="bi bi-filetype-csv mb-5 text-success d-flex justify-content-center align-items-center" style="font-size: 110px;"></i> -->
+                    <div class="d-flex justify-content-center align-items-center">
+                        <img src="{% static 'images/csv.png' %}" class="mb-5" width="150" style="filter: drop-shadow(10px 10px 10px lightgray);">
+                    </div>
+                    <form action="{% url 'download' %}" method="post" id="form" onsubmit="return validation()">
+                        {% csrf_token %}
+                        <div class="form-group input_media">
+                            <!-- <label for="file_name">File Name</label> -->
+                            <div class="input-group mb-3">
+                                <input type="text" class="input" id="filename" name="file_name" onkeyup="check()" autocomplete="off" placeholder="File Name">
+                                <div class="input-group-append">
+                                  <span class="input-group-text span" style="color:#b680d5" id="basic-addon2">.csv</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="error_msg" id="error_msg" style="margin-top: -13px; margin-bottom: -20px; font-size: 11px;color: #95a3e0;">* Enter File Name</p>
+                        <div class="form-group align-items-center mt-5 d-flex justify-content-center">
+                            <input type="submit" class="btn p-2 btn_ext" style="width: 100%;background-color: #c292de; color: #fff;" value="Download">
+                        </div>
+                    </form>
+                </div>
+                {% if unknown_files %}
+                <div class="col-md-4 unknown p-5 unknown_inner d-flex flex-column shadow bg-light" style="border-radius: 20px;">
+                    <center style="margin-top: -20px;"><h5>{{not_pdf}} Files where data is not extracted</h5></center>
+                    <div class="border rounded justify-content-between unknown_block" style="height: 310px;" >
+                        {% for i in unknown_files %}
+                        <div class="border rounded m-1 py-2 px-2 d-flex">
+                            <div style="width:max-content">
+                                <img class="inner_text" src="{% static 'images/pdf.png' %}" style="filter: drop-shadow(1.5px 1.5px 1.5px lightgray);" height="35">
+                            </div>
+                            <div style="overflow-x: hidden; overflow-y: hidden; height:32px;padding-left: 15px;">
+                                <p style="font-size: 10.3px; margin: 0px;">{{i}}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script>
+
+        let file_name = document.getElementById('filename');
+        let error_msg = document.getElementById('error_msg');
+
+        function validation(){
+            if ((file_name.value).length == 0){
+                console.log(file_name.length);
+                error_msg.classList.remove('error_msg');
+                file_name.classList.add('input_error');
+                return false;
+            }
+        }
+
+        function check(){
+            if ((file_name.value).length == 0){
+                console.log(file_name.length);
+                error_msg.classList.remove('error_msg');
+                file_name.classList.add('input_error');
+
+                return false;
+            }
+            else{
+                error_msg.classList.add('error_msg');
+                file_name.classList.remove('input_error');
+                return true;
+            }
+        }
+
+
+
+        // var form = document.getElementById('form')
+        // form.addEventListener('submit', ()=>{
+        //     console.log(document.getElementById('filename').value);
+        // })
+    </script>
+</body>
+{% endblock %}
+</html>

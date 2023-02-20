@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block content %}
+<head>
+    <style>
+        @media screen and (max-width: 800px){
+            .outer_row{
+                padding: 60px 10px 125px 10px !important;
+            }
+            .outer_column{
+                padding: 50px 5px 50px 5px !important;
+            }
+            .user_btn{
+                padding-inline: 20px !important;
+            }
+            .btn_area{
+                width: 100% !important;
+            }
+            .agree_btn{
+                width: 100% !important;
+            }
+            .agree_space{
+                width: 100% !important;
+                padding-inline: 10px !important;
+            }
+            .btn_outer_area{
+                width: 100% !important;
+            }
+        }
+        th{
+            width: 150px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center align-items-center p-4 outer_row">
+            <div class="col-md-6 rounded border shadow px-3 py-4 outer_column">
+                <h4 class="mb-5" style="text-align: center;">User Details</h4>
+                <table class="table">
+                    <tr>
+                        <th>Name</th>
+                        <td>{{ruser.first_name}} {{ruser.last_name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Contact</th>
+                        <td>{{ruser_detail.mobile}}</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>{{ruser.email}}</td>
+                    </tr>
+                    <tr>
+                        <th>Working Place</th>
+                        <td>{{ruser_detail.wplace}}</td>
+                    </tr>
+                    <tr>
+                        <th>State</th>
+                        <td>{{ruser_detail.state}}</td>
+                    </tr>
+                    <tr>
+                        <th>Date of Request</th>
+                        <td>{{ruser.date_joined}}</td>
+                    </tr>
+                </table>
+                <div class="row mt-5 mb-3">
+                    <div class="col-md-12 mb-3 d-flex justify-content-between">
+                        <div class="col-md-12 d-flex justify-content-center agree_space">
+                            <a href="/accepted/{{encrypt_key}}" class="btn btn-success agree_btn" style="width:95%;" onclick="confirm()">Agree</a>    
+                        </div>
+                    </div>
+                    <div class="col-md-12 d-flex justify-content-around btn_outer_area">
+                        <div class="col-md-6 d-flex justify-content-center btn_area">
+                            <a href="/delete_user/{{encrypt_key}}" class="btn btn-danger px-5 user_btn" style="width: 90%;">Delete User</a>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-center btn_area">
+                            <a href="{% url 'requests' %}" class="btn btn-warning px-5 user_btn" style="width: 90%;">Cancle</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let p = confirm("are you sure wantv to accept request ?");
+        function confirm(){
+            let p = confirm("are you sure wantv to accept request ?");
+            console.log(p)
+        }
+    </script>
+</body>
+{% endblock %}
