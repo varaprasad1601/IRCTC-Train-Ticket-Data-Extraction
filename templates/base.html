@@ -75,13 +75,12 @@
                         <li><a href="{% url 'contact' %}" class="nav-link links ms-4">Contact Us</a></li>
                         {% endif %}
                         {% if user.is_superuser %}
-                        <li><a href="admin" class="nav-link links ms-4">Admin</a></li>
                         <li><a href="{% url 'messages' %}" class="nav-link links ms-4">Messages</a></li>
                         {% endif %}
                         {% if user.is_staff %}
                         <li><a href="{% url 'requests' %}" class="nav-link links ms-4">Requests</a></li>
                         {% endif %}
-                        <li class="nav-link text-light">{{data.first_name}}</a></li>
+                        <li><a href="/" class="nav-link text-light ms-4">{{data.first_name}}</a></li>
                         <li><a href="{% url 'logout' %}" class="btn btn-outline-light ms-4 logout">Logout</a></li>
                     </ul>
                 </div>
